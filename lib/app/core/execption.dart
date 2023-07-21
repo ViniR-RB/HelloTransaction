@@ -6,3 +6,7 @@ class AppException implements Exception {
 class HomeGetAllTransactionError extends AppException {
   HomeGetAllTransactionError({required super.message});
 }
+
+class AuthLoginException extends AppException {
+  AuthLoginException({required super.message});
+}

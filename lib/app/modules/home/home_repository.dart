@@ -13,13 +13,14 @@ abstract class HomeRepository {
 }
 
 class HomeRepositoryImpl implements HomeRepository {
-  final HttpClient httpClient;
-  HomeRepositoryImpl(this.httpClient);
+  final HttpClient _httpClient;
+
+  HomeRepositoryImpl(this._httpClient);
 
   @override
   Future<Either<AppException, List<Transaction>>> getAllTransactions() async {
     try {
-      final response = await httpClient.get('/api/transaction/');
+      final response = await _httpClient.get('/api/transaction/investor');
       final data = response.data as List<dynamic>;
       final List<Transaction> transactions =
           data.map(TransactionAdapter.jsonFromTransactionModel).toList();

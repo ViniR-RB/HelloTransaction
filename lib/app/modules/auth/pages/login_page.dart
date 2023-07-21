@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
+import '../auth_controller.dart';
+import '../auth_event.dart';
 import 'custom_obscure_text_field.dart';
 import 'custom_text_field.dart';
 
@@ -13,6 +16,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  late final AuthController _controller;
+  @override
+  void initState() {
+    super.initState();
+    _controller = Modular.get<AuthController>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +39,6 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Positioned(
-                            left: -100,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                            )),
-                        const Positioned(child: CircleAvatar()),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Row(
@@ -56,28 +59,45 @@ class _LoginPageState extends State<LoginPage> {
                               ))
                             ],
                           ),
-                        )
+                        ),
                       ]),
                 ],
               ),
             ),
-            Container(
-              height: size.height * 0.7,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  CustomFormField(
-                    controller: _emailController,
-                    label: 'E-mail',
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  CustomObscureTextField(
-                    controller: _passwordController,
-                    label: 'Password',
-                  )
-                ],
+            SingleChildScrollView(
+              child: Container(
+                height: size.height * 0.7,
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    CustomFormField(
+                      controller: _emailController,
+                      label: 'E-mail',
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    CustomObscureTextField(
+                      controller: _passwordController,
+                      label: 'Password',
+                    ),
+                    Container(
+                      padding:
+                          const EdgeInsets.only(left: 12, right: 8, top: 12),
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                          onPressed: () => _controller.inputController.add(
+                              AuthLoginEvent(
+                                  email: _emailController.text,
+                                  password: _passwordController.text)),
+                          child: const Text('Log-In',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18))),
+                    )
+                  ],
+                ),
               ),
             ),
           ],

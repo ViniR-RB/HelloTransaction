@@ -21,6 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final HomeController _controller;
   bool isExpanded = false;
+
   @override
   void initState() {
     super.initState();
@@ -113,7 +114,16 @@ class _HomePageState extends State<HomePage> {
                 )
               ],
             ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 14, right: 8),
+            child: CustomButtonAction(
+              opacity: 0.2,
+              icon: Icons.refresh,
+              onTap: () =>
+                  _controller.inputController.add(HomeFetchTransactionsEvent()),
+            ),
+          ),
         ],
       ),
       body: StreamBuilder<AppState>(
@@ -225,8 +235,19 @@ class _HomePageState extends State<HomePage> {
               );
             } else if (states is HomeStateErrorGetTransactions) {
               return Center(
-                child: Text(states.message,
-                    style: const TextStyle(fontSize: 24, color: Colors.white)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(states.message,
+                        style:
+                            const TextStyle(fontSize: 24, color: Colors.white)),
+                    ElevatedButton(
+                      onPressed: () => _controller.inputController
+                          .add(HomeFetchTransactionsEvent()),
+                      child: const Text('Tente Novamente'),
+                    )
+                  ],
+                ),
               );
             } else {
               return const SizedBox.shrink();
